@@ -1,3 +1,13 @@
+/* Scope the document scrollbar to this route, including its Suspense fallback. */
+:global(html):has(.transparentScrollbar) {
+  scrollbar-width: none;
+}
+:global(html):has(.transparentScrollbar)::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 .page {
   --history-status-width: 112px;
   --history-amount-width: 176px;

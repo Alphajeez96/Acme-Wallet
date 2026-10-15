@@ -20,13 +20,13 @@ export const TransactionError = ({ onRetry }: { onRetry: () => void }) => (
   </div>
 )
 
-export const TransactionLoading = () => (
+export const TransactionLoading = ({ count = 6 }: { count?: number }) => (
   <div aria-label="Loading transactions" role="status" className={styles.skeleton}>
     <div className={styles.day}>
       <Skeleton className={styles.skeletonDay} />
     </div>
 
-    {Array.from({ length: 6 }, (_, index) => (
+    {Array.from({ length: count }, (_, index) => (
       <div key={index} className={styles.skeletonRow} aria-hidden="true">
         <Skeleton type="circle" size="lg" className={styles.skeletonAvatar} />
         <div className={styles.skeletonMain}>

@@ -194,7 +194,7 @@ const TransactionsPage = () => {
             {failed ? (
               <TransactionError onRetry={() => setRetry((value) => value + 1)} />
             ) : !result ? (
-              <TransactionLoading />
+              <TransactionLoading count={10} />
             ) : groups.length === 0 ? (
               <TransactionEmpty hasFilters={resultHasFilters} onClearFilters={clearFilters} />
             ) : (
