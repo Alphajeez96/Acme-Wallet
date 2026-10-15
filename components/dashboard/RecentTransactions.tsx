@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import type { Transaction } from '@/types/api'
 import { Card, CardHeader, Drawer, Money } from '@/components/ui'
+import { TransactionLoading } from '@/components/transactions/TransactionStates'
 import { TransactionRow } from '@/components/transactions'
 import { getTransactions } from '@/lib/api/endpoints'
 import { formatDateTime, TRANSACTION_STATUS_LABELS } from '@/lib/format'
@@ -31,7 +32,7 @@ export function RecentTransactions() {
           }
         />
       </div>
-      {isLoading && <p className={styles.message}>Loading…</p>}
+      {isLoading && <TransactionLoading count={5} showDay={false} />}
       {!isLoading && !transactions?.length && <p className={styles.message}>No transactions yet.</p>}
       {transactions?.map((tx) => (
         <TransactionRow key={tx.id} transaction={tx} onSelect={setSelected} />

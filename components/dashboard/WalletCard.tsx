@@ -1,14 +1,18 @@
-import type { Wallet } from '@/types/api'
+import type { Currency, Wallet } from '@/types/api'
 import { cx } from '@/lib/cx'
-import { Money } from '@/components/ui'
+import { Money, Skeleton } from '@/components/ui'
 import styles from './WalletCard.module.css'
 
-export function WalletCard({ wallet }: { wallet: Wallet }) {
+export function WalletCard({ wallet, currency }: { wallet?: Wallet; currency: Currency }) {
   return (
-    <article className={cx(styles.card, styles[wallet.currency])}>
-      <p className={styles.label}>{wallet.currency} wallet</p>
+    <article className={cx(styles.card, styles[currency])}>
+      <p className={styles.label}>{currency} wallet</p>
       <p className={styles.balance}>
-        <Money amount={wallet.balance} currency={wallet.currency} />
+        {wallet ? (
+          <Money amount={wallet.balance} currency={currency} />
+        ) : (
+          <Skeleton className={styles.balanceSkeleton} />
+        )}
       </p>
     </article>
   )

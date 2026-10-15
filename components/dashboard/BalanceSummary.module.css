@@ -5,6 +5,11 @@
   gap: var(--space-4);
 }
 
+.card > div {
+  flex: 1;
+  min-width: 0;
+}
+
 .label {
   font-size: var(--text-sm);
   color: var(--color-text-muted);
@@ -15,4 +20,13 @@
   font-size: var(--text-3xl);
   font-weight: var(--weight-heavy);
   letter-spacing: -0.02em;
+
+  min-height: calc(var(--text-3xl) * var(--leading-normal));
+  display: flex;
+  align-items: center;
+}
+
+.balanceSkeleton {
+  width: 220px;
+  max-width: 100%;
 }
