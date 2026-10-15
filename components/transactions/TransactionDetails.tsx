@@ -32,6 +32,7 @@ export const TransactionDetails = ({ id, onClose }: { id: string; onClose: () =>
   const [retry, setRetry] = useState(0)
   const [request, setRequest] = useState<{ transaction?: Transaction; error?: 'missing' | 'failed' }>({})
   const [copyStatus, setCopyStatus] = useState('')
+
   const copied = copyStatus === 'Reference copied'
   const reducedMotion = useReducedMotion()
 

@@ -1,7 +1,14 @@
 'use client'
 import { useRef, useSyncExternalStore, type ReactNode } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import {
+  motion,
+  animate,
+  AnimatePresence,
+  useDragControls,
+  useMotionValue,
+  useReducedMotion,
+} from 'motion/react'
 import { Button } from '../Button'
 import { Icon } from '../Icon'
 import styles from './Drawer.module.css'
@@ -25,6 +32,8 @@ export interface DrawerProps {
 export const Drawer = ({ open, title, onClose, children, footer }: DrawerProps) => {
   const mobile = useSyncExternalStore(subscribe, isMobile, serverSnapshot)
   const reducedMotion = useReducedMotion()
+  const dragControls = useDragControls()
+  const y = useMotionValue<number | string>(0)
   const opener = useRef<HTMLElement | null>(null)
   const offset = mobile ? { y: '100%', x: 0 } : { x: '100%', y: 0 }
 
@@ -66,6 +75,29 @@ export const Drawer = ({ open, title, onClose, children, footer }: DrawerProps) 
             >
               <motion.div
                 className={styles.panel}
+                drag={mobile ? 'y' : false}
+                dragControls={dragControls}
+                dragListener={false}
+                dragConstraints={{ top: 0 }}
+                dragElastic={0}
+                style={{ y }}
+                dragMomentum={false}
+                onDragEnd={(_, { offset, velocity }) => {
+                  const dismiss = offset.y > 100 || (offset.y > 20 && velocity.y > 500)
+                  animate(
+                    y,
+                    dismiss ? '100%' : 0,
+                    reducedMotion
+                      ? { duration: 0 }
+                      : {
+                          type: 'spring',
+                          stiffness: 300,
+                          damping: 25,
+                          mass: 0.9,
+                        }
+                  )
+                  if (dismiss) onClose()
+                }}
                 initial={{ ...offset, opacity: 1 }}
                 animate={{ x: 0, y: 0, opacity: 1 }}
                 exit={{ ...offset, opacity: 0 }}
@@ -79,7 +111,13 @@ export const Drawer = ({ open, title, onClose, children, footer }: DrawerProps) 
                       }
                 }
               >
-                <div className={styles.grabber} aria-hidden="true" />
+                <div
+                  className={styles.grabber}
+                  aria-hidden="true"
+                  onPointerDown={(event) => dragControls.start(event)}
+                >
+                  <span className={styles.grabberBar} />
+                </div>
                 <div className={styles.header}>
                   <Dialog.Title className={styles.title}>{title}</Dialog.Title>
                   <Dialog.Close asChild>

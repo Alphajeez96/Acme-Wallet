@@ -74,11 +74,27 @@
 
 @media (max-width: 640px) {
   .grabber {
-    display: block;
+    position: relative;
+    display: flex;
+    justify-content: center;
     flex-shrink: 0;
+    height: 12px;
+    padding-top: 8px;
+    cursor: grab;
+    touch-action: none;
+  }
+  .grabber::before {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 28px;
+    content: '';
+  }
+  .grabber:active {
+    cursor: grabbing;
+  }
+  .grabberBar {
     width: 36px;
     height: 4px;
-    margin: 8px auto 0;
     border-radius: var(--radius-full);
     background: var(--color-border-strong);
   }
