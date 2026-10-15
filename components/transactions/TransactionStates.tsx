@@ -1,6 +1,7 @@
 import { cx } from '@/lib/cx'
-import { Button, Icon, Skeleton } from '@/components/ui'
 import styles from './TransactionStates.module.css'
+import pageStyles from '@/app/transactions/page.module.css'
+import { Button, Card, Icon, Skeleton } from '@/components/ui'
 
 export const TransactionError = ({ onRetry }: { onRetry: () => void }) => (
   <div className={styles.state} role="alert">
@@ -67,5 +68,28 @@ export const TransactionEmpty = ({
         Clear filters
       </Button>
     )}
+  </div>
+)
+
+export const TransactionPageLoading = () => (
+  <div className={pageStyles.page} aria-busy="true">
+    <header>
+      <h1 className={pageStyles.title}>Transactions</h1>
+      <p className={pageStyles.subtitle} aria-label="Loading transaction count">
+        <Skeleton size="sm" className={pageStyles.subtitleSkeleton} />
+      </p>
+    </header>
+
+    <div className={pageStyles.filters}>
+      {['Search', 'Type', 'Status'].map((label) => (
+        <div key={label} className={cx(styles.filterSkeleton, label === 'Search' && pageStyles.search)}>
+          <span>{label}</span>
+          <Skeleton type="rectangle" className={styles.controlSkeleton} />
+        </div>
+      ))}
+    </div>
+    <Card padding="none">
+      <TransactionLoading />
+    </Card>
   </div>
 )
