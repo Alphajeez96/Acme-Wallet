@@ -30,3 +30,32 @@
   width: 220px;
   max-width: 100%;
 }
+
+.balanceViewport {
+  display: block;
+  height: calc(1em * var(--leading-normal));
+  overflow: hidden;
+}
+.balanceTrack {
+  display: grid;
+  grid-template-rows: repeat(2, calc(1em * var(--leading-normal)));
+}
+.balanceTrack > span {
+  display: flex;
+  align-items: center;
+}
+.toggleViewport {
+  display: block;
+  width: 60px;
+  height: 16px;
+  overflow: hidden;
+}
+.toggleTrack {
+  display: grid;
+  grid-template-rows: repeat(2, 16px);
+}
+.toggleState {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
