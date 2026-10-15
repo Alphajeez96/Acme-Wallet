@@ -5,7 +5,17 @@ import { getTransactions, type TransactionQuery } from '@/lib/api/endpoints'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { TransactionPagination } from '@/components/transactions/TransactionPagination'
 import { formatMoney, TRANSACTION_STATUS_LABELS, TRANSACTION_TYPE_LABELS } from '@/lib/format'
-import { Badge, Card, Icon, Input, Select, Skeleton, type BadgeTone, type IconName } from '@/components/ui'
+import {
+  Badge,
+  Button,
+  Card,
+  Icon,
+  Input,
+  Select,
+  Skeleton,
+  type BadgeTone,
+  type IconName,
+} from '@/components/ui'
 import {
   groupTransactions,
   transactionInitials,
@@ -18,8 +28,6 @@ import {
 } from '@/components/transactions/TransactionStates'
 
 import styles from './page.module.css'
-
-import buttonStyles from '@/components/ui/Button/Button.module.css'
 import type { TransactionStatus, TransactionType } from '@/types/api'
 
 type TransactionSearchKey = keyof Pick<TransactionQuery, 'page' | 'type' | 'status' | 'q'>
@@ -196,13 +204,9 @@ const TransactionsPage = () => {
             onValueChange={(value) => updateFilters({ status: value })}
           />
           {hasFilters && (
-            <button
-              type="button"
-              className={cx(buttonStyles.button, buttonStyles.ghost, styles.clearFilters)}
-              onClick={clearFilters}
-            >
+            <Button variant="ghost" className={styles.clearFilters} onClick={clearFilters}>
               Clear filters
-            </button>
+            </Button>
           )}
         </div>
 

@@ -1,7 +1,6 @@
 import { cx } from '@/lib/cx'
-import { Icon, Skeleton } from '@/components/ui'
+import { Button, Icon, Skeleton } from '@/components/ui'
 import styles from './TransactionStates.module.css'
-import buttonStyles from '@/components/ui/Button/Button.module.css'
 
 export const TransactionError = ({ onRetry }: { onRetry: () => void }) => (
   <div className={styles.state} role="alert">
@@ -14,14 +13,9 @@ export const TransactionError = ({ onRetry }: { onRetry: () => void }) => (
       <p>Check your connection and try again.</p>
     </div>
 
-    <button
-      type="button"
-      className={cx(buttonStyles.button, buttonStyles.primary, buttonStyles.md)}
-      onClick={onRetry}
-    >
-      <Icon name="refresh" size={16} />
+    <Button iconLeft="refresh" onClick={onRetry}>
       Try again
-    </button>
+    </Button>
   </div>
 )
 
@@ -69,13 +63,9 @@ export const TransactionEmpty = ({
     </div>
 
     {hasFilters && (
-      <button
-        type="button"
-        className={cx(buttonStyles.button, buttonStyles.secondary, buttonStyles.md)}
-        onClick={onClearFilters}
-      >
+      <Button variant="secondary" onClick={onClearFilters}>
         Clear filters
-      </button>
+      </Button>
     )}
   </div>
 )
