@@ -13,9 +13,18 @@
   color: var(--color-text);
 }
 
-.select:focus {
-  border-color: var(--color-primary);
-  outline: 1px solid var(--color-primary);
+.select:focus,
+.select:focus-visible {
+  border-color: var(--color-border-strong);
+  outline: none;
+  outline-offset: 0;
+}
+
+.options:focus,
+.options:focus-visible,
+.option:focus,
+.option:focus-visible {
+  outline: none;
   outline-offset: 0;
 }
 
@@ -39,6 +48,13 @@
   background: var(--color-surface);
   box-shadow: var(--shadow-overlay);
 }
+
+.chevronMotion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+}
 .option {
   padding: var(--space-2) var(--space-3);
   font-size: var(--text-md);
@@ -46,6 +62,10 @@
   cursor: pointer;
   outline: none;
   user-select: none;
+}
+
+.options[data-state='closed'] {
+  pointer-events: none;
 }
 .option:hover,
 .option[data-highlighted] {
