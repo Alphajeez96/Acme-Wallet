@@ -11,7 +11,7 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   fullWidth?: boolean
 }
 
-export const Button = ({
+export function Button({
   children,
   variant = 'primary',
   size = 'md',
@@ -23,7 +23,7 @@ export const Button = ({
   onClick,
   className,
   ...rest
-}: ButtonProps) => {
+}: ButtonProps) {
   return (
     <button
       type={type}
