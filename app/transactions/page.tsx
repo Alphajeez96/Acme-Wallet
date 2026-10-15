@@ -1,22 +1,19 @@
 'use client'
+
 import { useEffect, useRef, useState } from 'react'
+
+import Link from 'next/link'
 import { cx } from '@/lib/cx'
-import { getTransactions, type TransactionQuery } from '@/lib/api/endpoints'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { getTransactions, type TransactionQuery } from '@/lib/api/endpoints'
+import { TransactionDetails } from '@/components/transactions/TransactionDetails'
 import { TransactionPagination } from '@/components/transactions/TransactionPagination'
+import { Badge, Button, Card, Drawer, Icon, Input, Select, Skeleton } from '@/components/ui'
 import { formatMoney, TRANSACTION_STATUS_LABELS, TRANSACTION_TYPE_LABELS } from '@/lib/format'
 import {
-  Badge,
-  Button,
-  Card,
-  Icon,
-  Input,
-  Select,
-  Skeleton,
-  type BadgeTone,
-  type IconName,
-} from '@/components/ui'
-import {
+  TYPE_ICONS,
+  CREDIT_TYPES,
+  STATUS_TONES,
   groupTransactions,
   transactionInitials,
   formatTransactionTime,
@@ -30,13 +27,14 @@ import {
 import styles from './page.module.css'
 import type { TransactionStatus, TransactionType } from '@/types/api'
 
-type TransactionSearchKey = keyof Pick<TransactionQuery, 'page' | 'type' | 'status' | 'q'>
+type TransactionSearchKey = keyof Pick<TransactionQuery, 'page' | 'type' | 'status' | 'q'> | 'id'
 
 const TRANSACTION_SEARCH_PARAMS = {
+  q: 'q',
+  id: 'id',
   page: 'page',
   type: 'type',
   status: 'status',
-  q: 'q',
 } as const satisfies { [Key in TransactionSearchKey]: Key }
 
 type TransactionSearchUpdates = Partial<Record<TransactionSearchKey, string>>
@@ -59,26 +57,14 @@ const STATUS_OPTIONS = [
   { value: '', label: 'All statuses' },
   ...Object.entries(TRANSACTION_STATUS_LABELS).map(([value, label]) => ({ value, label })),
 ]
-const TYPE_ICONS: Record<TransactionType, IconName> = {
-  conversion: 'swap',
-  card_payment: 'card',
-  bill_payment: 'receipt',
-  deposit: 'arrow-down-left',
-  withdrawal: 'arrow-up-right',
-  transfer_in: 'arrow-down-left',
-  transfer_out: 'arrow-up-right',
-}
-const STATUS_TONES: Record<TransactionStatus, BadgeTone> = {
-  successful: 'success',
-  pending: 'warning',
-  failed: 'danger',
-}
-const CREDIT_TYPES: TransactionType[] = ['deposit', 'transfer_in', 'conversion']
 
 const TransactionsPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const queryString = searchParams.toString()
+  const selectedId = searchParams.get(TRANSACTION_SEARCH_PARAMS.id)
+  const listParams = new URLSearchParams(searchParams.toString())
+  listParams.delete(TRANSACTION_SEARCH_PARAMS.id)
+  const queryString = listParams.toString()
 
   const rawPage = Number(searchParams.get(TRANSACTION_SEARCH_PARAMS.page) ?? 1)
   const page = Number.isSafeInteger(rawPage) && rawPage > 0 ? rawPage : 1
@@ -231,7 +217,13 @@ const TransactionsPage = () => {
                       </Badge>
                     )
                     return (
-                      <div key={tx.id} className={styles.row}>
+                      <Link
+                        key={tx.id}
+                        scroll={false}
+                        className={styles.row}
+                        aria-haspopup="dialog"
+                        href={queryHref(queryString, { id: tx.id })}
+                      >
                         <span className={styles.avatar}>
                           {initials ?? <Icon name={TYPE_ICONS[tx.type]} size={18} />}
                         </span>
@@ -253,7 +245,7 @@ const TransactionsPage = () => {
                           <p className={styles.time}>{formatTransactionTime(tx.createdAt)}</p>
                           <div className={styles.mobileStatus}>{badge}</div>
                         </div>
-                      </div>
+                      </Link>
                     )
                   })}
                 </section>
@@ -270,6 +262,20 @@ const TransactionsPage = () => {
           />
         )}
       </div>
+
+      <Drawer
+        open={Boolean(selectedId)}
+        title="Transaction details"
+        onClose={() => router.replace(queryHref(queryString, {}), { scroll: false })}
+      >
+        {selectedId && (
+          <TransactionDetails
+            key={selectedId}
+            id={selectedId}
+            onClose={() => router.replace(queryHref(queryString, {}), { scroll: false })}
+          />
+        )}
+      </Drawer>
     </div>
   )
 }

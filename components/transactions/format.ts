@@ -1,5 +1,22 @@
-import type { Transaction } from '@/types/api'
+import type { BadgeTone, IconName } from '@/components/ui'
 import { format, isToday, isYesterday } from 'date-fns'
+import type { Transaction, TransactionStatus, TransactionType } from '@/types/api'
+
+export const TYPE_ICONS: Record<TransactionType, IconName> = {
+  conversion: 'swap',
+  card_payment: 'card',
+  bill_payment: 'receipt',
+  deposit: 'arrow-down-left',
+  withdrawal: 'arrow-up-right',
+  transfer_in: 'arrow-down-left',
+  transfer_out: 'arrow-up-right',
+}
+export const CREDIT_TYPES: TransactionType[] = ['deposit', 'transfer_in', 'conversion']
+export const STATUS_TONES: Record<TransactionStatus, BadgeTone> = {
+  failed: 'danger',
+  pending: 'warning',
+  successful: 'success',
+}
 
 export const formatTransactionTime = (iso: string) => format(new Date(iso), 'HH:mm')
 

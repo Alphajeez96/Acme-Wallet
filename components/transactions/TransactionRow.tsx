@@ -1,20 +1,9 @@
-import type { Transaction, TransactionType } from '@/types/api'
-import { Icon, type IconName, Money } from '@/components/ui'
+import type { Transaction } from '@/types/api'
+import { Icon, Money } from '@/components/ui'
 import { formatDateTime, TRANSACTION_TYPE_LABELS } from '@/lib/format'
+import { CREDIT_TYPES, TYPE_ICONS } from './format'
 import { StatusDot } from './StatusDot'
 import styles from './TransactionRow.module.css'
-
-const TYPE_ICONS: Record<TransactionType, IconName> = {
-  deposit: 'arrow-down-left',
-  transfer_in: 'arrow-down-left',
-  withdrawal: 'arrow-up-right',
-  transfer_out: 'arrow-up-right',
-  conversion: 'swap',
-  card_payment: 'card',
-  bill_payment: 'receipt',
-}
-
-const CREDIT_TYPES: TransactionType[] = ['deposit', 'transfer_in', 'conversion']
 
 export interface TransactionRowProps {
   transaction: Transaction
