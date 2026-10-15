@@ -35,7 +35,11 @@ export function RatesWidget({ base }: { base: Currency }) {
         })}
       </dl>
       <p className={styles.updated}>
-        {updatedAt ? `Updated ${formatTime(updatedAt)}` : <Skeleton size="sm" className={styles.timeSkeleton} />}
+        {updatedAt ? (
+          `Updated ${formatTime(updatedAt)}`
+        ) : (
+          <Skeleton size="sm" className={styles.timeSkeleton} />
+        )}
       </p>
     </Card>
   )
