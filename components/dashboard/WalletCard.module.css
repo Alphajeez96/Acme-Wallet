@@ -26,4 +26,14 @@
   margin-top: var(--space-3);
   font-size: var(--text-xl);
   font-weight: var(--weight-bold);
+
+  min-height: calc(var(--text-xl) * var(--leading-normal));
+  display: flex;
+  align-items: center;
+}
+
+.balanceSkeleton {
+  width: 140px;
+  background: currentColor;
+  opacity: 0.25;
 }

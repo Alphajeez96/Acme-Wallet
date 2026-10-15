@@ -1,0 +1,66 @@
+.pagination {
+  --page-number-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.desktopSummary,
+.mobilePages p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.pages {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.paginationButton {
+  margin: 0 var(--space-1);
+}
+.pageNumber,
+.currentPage {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--page-number-size);
+  height: var(--page-number-size);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-md);
+  font-size: var(--text-md);
+}
+.pageNumber {
+  color: var(--color-text);
+  font-weight: var(--weight-medium);
+}
+.currentPage {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-weight: var(--weight-semibold);
+}
+.ellipsis {
+  min-width: var(--space-6);
+  padding: 0 var(--space-2);
+  font-size: var(--text-md);
+  color: var(--color-text-subtle);
+}
+.mobilePages {
+  display: none;
+}
+.pageNumber:hover {
+  background: var(--color-primary-soft);
+}
+@media (max-width: 640px) {
+  .desktopSummary,
+  .pages {
+    display: none;
+  }
+  .mobilePages {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .mobilePages p {
+    color: var(--color-text);
+  }
+}

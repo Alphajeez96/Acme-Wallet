@@ -1,7 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
-import type { User } from '@/types/api'
+import { CURRENCIES, type User } from '@/types/api'
 import { BalanceSummary, RatesWidget, RecentTransactions, WalletCard } from '@/components/dashboard'
+import { Skeleton } from '@/components/ui'
 import { getMe } from '@/lib/api/endpoints'
 import styles from './page.module.css'
 
@@ -15,21 +16,23 @@ export default function DashboardPage() {
       .finally(() => setIsLoading(false))
   }, [])
 
-  if (isLoading) return <p className={styles.loading}>Loading…</p>
-
   return (
-    <div className={styles.page}>
+    <div className={styles.page} aria-busy={isLoading}>
       <header>
-        <h1 className={styles.title}>Welcome back, {user!.firstName}</h1>
+        <h1 className={styles.title}>
+          Welcome back, {isLoading ? <Skeleton className={styles.nameSkeleton} /> : user!.firstName}
+        </h1>
         <p className={styles.subtitle}>Here&apos;s what&apos;s happening with your money today.</p>
       </header>
 
-      <BalanceSummary wallets={user!.wallets} />
+      <BalanceSummary wallets={user?.wallets} />
 
       <div className={styles.wallets}>
-        {user!.wallets.map((wallet) => (
-          <WalletCard key={wallet.currency} wallet={wallet} />
-        ))}
+        {isLoading
+          ? CURRENCIES.map((currency) => <WalletCard key={currency} currency={currency} />)
+          : user!.wallets.map((wallet) => (
+              <WalletCard key={wallet.currency} currency={wallet.currency} wallet={wallet} />
+            ))}
       </div>
 
       <div className={styles.columns}>

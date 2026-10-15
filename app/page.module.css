@@ -4,8 +4,10 @@
   gap: var(--space-6);
 }
 
-.loading {
-  color: var(--color-text-muted);
+.nameSkeleton {
+  display: inline-block;
+  width: 120px;
+  vertical-align: middle;
 }
 
 .title {
