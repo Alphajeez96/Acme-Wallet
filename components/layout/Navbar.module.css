@@ -49,11 +49,41 @@
 }
 
 @media (max-width: 640px) {
-  .links {
-    display: none;
-  }
-
   .inner {
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    height: auto;
+    gap: 0;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    height: var(--navbar-height);
+  }
+  .links {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    align-items: center;
+    gap: var(--space-6);
+    height: 44px;
+    margin: 0 calc(-1 * var(--layout-gutter));
+    padding: 0 var(--layout-gutter);
+    border-top: 1px solid var(--color-border);
+  }
+  .link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 44px;
+  }
+  .active::after {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-primary);
+    content: '';
   }
 }

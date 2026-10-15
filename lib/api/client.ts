@@ -22,7 +22,13 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<ApiSucc
     },
   })
   const body = await res.json()
-  console.log('[api]', path, body)
+  if (!res.ok) {
+    throw new ApiError(
+      res.status,
+      body.error?.code ?? 'REQUEST_FAILED',
+      body.error?.message ?? 'Something went wrong. Please try again.'
+    )
+  }
   return body
 }
 

@@ -1,0 +1,81 @@
+import { cx } from '@/lib/cx'
+import { Icon, Skeleton } from '@/components/ui'
+import styles from './TransactionStates.module.css'
+import buttonStyles from '@/components/ui/Button/Button.module.css'
+
+export const TransactionError = ({ onRetry }: { onRetry: () => void }) => (
+  <div className={styles.state} role="alert">
+    <span className={cx(styles.stateIcon, styles.errorIcon)}>
+      <Icon name="alert" size={24} />
+    </span>
+
+    <div>
+      <h2>We couldn’t load your transactions</h2>
+      <p>Check your connection and try again.</p>
+    </div>
+
+    <button
+      type="button"
+      className={cx(buttonStyles.button, buttonStyles.primary, buttonStyles.md)}
+      onClick={onRetry}
+    >
+      <Icon name="refresh" size={16} />
+      Try again
+    </button>
+  </div>
+)
+
+export const TransactionLoading = () => (
+  <div aria-label="Loading transactions" role="status" className={styles.skeleton}>
+    <div className={styles.day}>
+      <Skeleton className={styles.skeletonDay} />
+    </div>
+
+    {Array.from({ length: 6 }, (_, index) => (
+      <div key={index} className={styles.skeletonRow} aria-hidden="true">
+        <Skeleton type="circle" size="lg" className={styles.skeletonAvatar} />
+        <div className={styles.skeletonMain}>
+          <Skeleton className={styles.skeletonTitle} />
+          <Skeleton className={styles.skeletonNarration} />
+        </div>
+        <div className={styles.skeletonEnd}>
+          <Skeleton className={styles.skeletonAmount} />
+          <Skeleton className={styles.skeletonTime} />
+        </div>
+      </div>
+    ))}
+  </div>
+)
+
+export const TransactionEmpty = ({
+  hasFilters,
+  onClearFilters,
+}: {
+  hasFilters: boolean
+  onClearFilters: () => void
+}) => (
+  <div className={styles.state}>
+    <span className={styles.stateIcon}>
+      <Icon name={hasFilters ? 'search' : 'inbox'} size={24} />
+    </span>
+
+    <div>
+      <h2>{hasFilters ? 'No transactions match your filters' : 'No transactions yet'}</h2>
+      <p>
+        {hasFilters
+          ? 'Try a different search term or remove some filters.'
+          : 'When you add money, send a transfer or pay with your card, it will show up here.'}
+      </p>
+    </div>
+
+    {hasFilters && (
+      <button
+        type="button"
+        className={cx(buttonStyles.button, buttonStyles.secondary, buttonStyles.md)}
+        onClick={onClearFilters}
+      >
+        Clear filters
+      </button>
+    )}
+  </div>
+)
