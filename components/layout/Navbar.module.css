@@ -40,7 +40,7 @@
 }
 
 .link:hover {
-  color: var(--color-text);
+  color: var(--color-primary);
 }
 
 .active {
