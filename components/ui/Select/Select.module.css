@@ -20,6 +20,10 @@
   outline-offset: 0;
 }
 
+.select:focus-visible {
+  background: var(--color-primary-soft);
+}
+
 .options:focus,
 .options:focus-visible,
 .option:focus,

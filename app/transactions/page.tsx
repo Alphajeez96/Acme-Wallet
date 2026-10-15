@@ -80,13 +80,14 @@ const TransactionsPage = () => {
   const hasFilters = Boolean(q || type || status)
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const [searchDraft, setSearchDraft] = useState({ query: q, value: q })
-  if (searchDraft.query !== q) setSearchDraft({ query: q, value: q })
+  const [searchDraft, setSearchDraft] = useState({ query: queryString, value: q })
+  if (searchDraft.query !== queryString) setSearchDraft({ query: queryString, value: q })
   const searchValue = searchDraft.value
   const [retry, setRetry] = useState(0)
   const [request, setRequest] = useState<{
     failed: boolean
     loading: boolean
+    resultHasFilters?: boolean
     result?: Awaited<ReturnType<typeof getTransactions>>
   }>({ loading: true, failed: false })
 
@@ -101,7 +102,7 @@ const TransactionsPage = () => {
           router.replace(queryHref(queryString, { page: String(result.meta.totalPages) }), { scroll: false })
           return
         }
-        setRequest({ result, loading: false, failed: false })
+        setRequest({ result, resultHasFilters: Boolean(q || type || status), loading: false, failed: false })
       } catch {
         if (!controller.signal.aborted)
           setRequest((previous) => ({ ...previous, loading: false, failed: true }))
@@ -127,15 +128,16 @@ const TransactionsPage = () => {
 
   const search = (value: string) => {
     if (searchTimer.current) clearTimeout(searchTimer.current)
-    setSearchDraft({ query: q, value })
+    setSearchDraft({ query: queryString, value })
     searchTimer.current = setTimeout(() => updateFilters({ q: value }), 300)
   }
 
   const { result, loading, failed } = request
+  const resultHasFilters = request.resultHasFilters ?? hasFilters
   const meta = result?.meta
   const groups = groupTransactions(result?.data ?? [])
   const subtitle = meta ? (
-    `${meta.total} ${hasFilters ? 'results' : 'transactions'}`
+    `${meta.total} ${resultHasFilters ? 'results' : 'transactions'}`
   ) : failed ? (
     'Transaction history'
   ) : (
@@ -166,16 +168,7 @@ const TransactionsPage = () => {
             value={searchValue}
             onChange={(event) => search(event.target.value)}
             placeholder="Search by reference, name or narration"
-            fieldClassName={styles.desktopSearch}
-          />
-          <Input
-            label="Search"
-            aria-label="Search transactions"
-            leadingIcon="search"
-            value={searchValue}
-            onChange={(event) => search(event.target.value)}
-            placeholder="Search reference, name…"
-            fieldClassName={styles.mobileSearch}
+            fieldClassName={styles.search}
           />
           <Select
             label="Type"
@@ -203,7 +196,7 @@ const TransactionsPage = () => {
             ) : !result ? (
               <TransactionLoading />
             ) : groups.length === 0 ? (
-              <TransactionEmpty hasFilters={hasFilters} onClearFilters={clearFilters} />
+              <TransactionEmpty hasFilters={resultHasFilters} onClearFilters={clearFilters} />
             ) : (
               groups.map((group) => (
                 <section key={group.date} aria-label={group.label}>
@@ -258,7 +251,9 @@ const TransactionsPage = () => {
           <TransactionPagination
             meta={meta}
             loading={loading}
-            pageHref={(page) => queryHref(queryString, { page: String(page) })}
+            pageHref={(page) =>
+              queryHref(queryString, { q: searchValue, page: searchValue !== q ? '1' : String(page) })
+            }
           />
         )}
       </div>
