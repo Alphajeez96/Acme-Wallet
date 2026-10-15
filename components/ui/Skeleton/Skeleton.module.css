@@ -1,0 +1,30 @@
+.skeleton {
+  display: block;
+  flex-shrink: 0;
+  background: var(--color-border);
+}
+.text {
+  width: 100%;
+  height: var(--skeleton-size);
+  border-radius: var(--radius-sm);
+}
+.circle,
+.rectangle {
+  width: var(--skeleton-size);
+  height: var(--skeleton-size);
+}
+.circle {
+  border-radius: var(--radius-full);
+}
+.rectangle {
+  border-radius: var(--radius-sm);
+}
+.sm {
+  --skeleton-size: 12px;
+}
+.md {
+  --skeleton-size: 24px;
+}
+.lg {
+  --skeleton-size: 40px;
+}
